@@ -1,10 +1,10 @@
 parameters:
-  vivait_tenant.registry.class: Vivait\TenantBundle\Registry\TenantRegistry
+    vivait_tenant.registry.class: Vivait\TenantBundle\Registry\TenantRegistry
 
 services:
-  vivait_tenant.registry:
-    synthetic: true
-    public: true
+    vivait_tenant.registry:
+        synthetic: true
+        public: true
 
     Vivait\TenantBundle\Command\ListTenantsCommand:
-        tags: ['console.command']
+        tags: [ 'console.command' ]
