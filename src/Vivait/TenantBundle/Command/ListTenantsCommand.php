@@ -2,17 +2,14 @@
 
 namespace Vivait\TenantBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Vivait\TenantBundle\Kernel\TenantKernel;
-use Vivait\TenantBundle\Model\Tenant;
 use Vivait\TenantBundle\Registry\TenantRegistry;
 
-class ListTenantsCommand extends ContainerAwareCommand
+class ListTenantsCommand extends Command
 {
     protected function configure()
     {
@@ -34,17 +31,17 @@ class ListTenantsCommand extends ContainerAwareCommand
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $null = $input->getOption('null');
         $force = $input->getOption('force');
 
         /** @var TenantKernel $kernel */
-        $kernel = $this->getContainer()->get('kernel');
+        $kernel = $this->getApplication()->getKernel();
 
         if ($force || $kernel->enableTenanting) {
             /** @var TenantRegistry $registry */
-            $registry = $this->getContainer()->get('vivait_tenant.registry');
+            $registry = $kernel->getContainer()->get('vivait_tenant.registry');
 
             $separator = $null ? "\0" : "\n";
 
@@ -52,5 +49,7 @@ class ListTenantsCommand extends ContainerAwareCommand
                 $output->write($tenant->getKey() . $separator);
             }
         }
+
+        return 0;
     }
 }
